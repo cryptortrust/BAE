@@ -1,5 +1,5 @@
 # Bae - decentralized exchange for Ethereum ERC223 tokens
-[![Build Status](https://travis-ci.org/rados-io/radex.svg?branch=master)](https://travis-ci.org/rados-io/radex)[![Coverage Status](https://coveralls.io/repos/github/rados-io/radex/badge.svg?branch=master)](https://coveralls.io/github/rados-io/radex?branch=master)
+[![Build Status]
 
 The smart contract backend for [Bae](Link coming).
 
@@ -9,9 +9,9 @@ You can view the smart contract on [EtherScan here](https://).
 
 ## Ethereum transaction fee structure
 
-Even though we, the creators of Radex, do not take any fees for using the exchange, due to the decentralized nature of the exchange you will still have to pay ethereum transaction fees. So how much will it cost?
+we do not take any fees for using the exchange, due to the decentralized nature of the exchange you will still have to pay ethereum transaction fees. So how much will it cost?
 
-According to [EthGasStation](https://ethgasstation.info/index.php) the recommended Ethereum gas price is 1 Gwei. Using this number we can calculate how much money each action on Radex will cost you in practice. I'll link to actual Ethereum transactions so you can confirm these numbers for yourself.
+According to [EthGasStation](https://ethgasstation.info/index.php) the recommended Ethereum gas price is 1 Gwei. Using this number we can calculate how much money each action on Bae will cost you in practice. I'll link to actual Ethereum transactions so you can confirm these numbers for yourself.
 
 Note that these numbers are fixed and identical for everybody, they do not change depending on transaction amount. If you plan to trade large volumes you might not even notice these transaction fees.
 
