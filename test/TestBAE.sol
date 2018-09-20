@@ -4,11 +4,11 @@ import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
 import "../contracts/Radex.sol";
 
-contract TestRadex {
+contract TestBae {
   function testTokenAddress() {
-    Radex rdx = Radex(DeployedAddresses.Radex());
+    Radex rdx = Bae(DeployedAddresses.Radex());
     uint256 feeMultiplier = rdx.feeMultiplier();
 
-    Assert.equal(feeMultiplier, 1000, "Radex charges market takers 0.1% fee and gives it to market makers.");
+    Assert.equal(feeMultiplier, 1000, "Bae charges market takers 0.1% fee and gives it to market makers.");
   }
 }
