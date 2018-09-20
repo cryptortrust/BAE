@@ -1,14 +1,12 @@
-Radex - decentralized exchange for Ethereum ERC223 tokens
+BAE - decentralized exchange for Ethereum ERC223 tokens
 Build StatusCoverage Status
 
-The smart contract backend for Radex.
+The smart contract backend for BAE.
 
-Big thanks to Ethereum, Truffle, OpenZeppelin and Colony for the open source tools and learning materials.
-
-You can view the smart contract on EtherScan here.
+You can view the smart contract on EtherScan here. (Coming)
 
 Ethereum transaction fee structure
-Even though we, the creators of Radex, do not take any fees for using the exchange, due to the decentralized nature of the exchange you will still have to pay ethereum transaction fees. So how much will it cost?
+Even though we do not take any fees for using the exchange, due to the decentralized nature of the exchange you will still have to pay ethereum transaction fees. So how much will it cost?
 
 According to EthGasStation the recommended Ethereum gas price is 1 Gwei. Using this number we can calculate how much money each action on Radex will cost you in practice. I'll link to actual Ethereum transactions so you can confirm these numbers for yourself.
 
