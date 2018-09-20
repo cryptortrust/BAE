@@ -13,12 +13,14 @@ According to EthGasStation the recommended Ethereum gas price is 1 Gwei. Using t
 Note that these numbers are fixed and identical for everybody, they do not change depending on transaction amount. If you plan to trade large volumes you might not even notice these transaction fees.
 
 Action	Gas used	USD fee (approx.)
+
 Deposit ETH	29948 gas	$0.014
 Deposit STN	50930 gas	$0.024
 Create Order	151560 gas	$0.071
 Trade	53626 gas	$0.025
 Withdraw ETH	38386 gas	$0.018
 Withdraw STN	51070 gas	$0.024
+
 These are the lowest fees of any cryptocurrency exchange that currently exists.
 
 Happy trading!
