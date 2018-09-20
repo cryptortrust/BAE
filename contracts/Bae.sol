@@ -40,7 +40,7 @@ contract BAE is ContractReceiver {
   event MarketMaker(address indexed _owner, address indexed _token, uint256 _amount, uint256 _time);
   event Trade(address indexed _from, address indexed _to, uint256 indexed _orderId, uint256 _soldTokens, uint256 _boughtTokens, uint256 _time);
 
-  function Radex() {
+  function Bae() {
     feeMultiplier = 1000;
     admin = msg.sender;
   }
