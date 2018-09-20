@@ -1,6 +1,6 @@
-var Saturn = artifacts.require("./Saturn.sol");
+var Baenet = artifacts.require("./Baenet.sol");
 var AnotherToken = artifacts.require("./AnotherToken.sol");
-var Radex  = artifacts.require("./Radex.sol");
+var Bae  = artifacts.require("./Bae.sol");
 var ERC20Demo = artifacts.require("./ERC20Demo.sol");
 var ERC223Upgrade = artifacts.require("./ERC223Upgrade.sol");
 
@@ -8,9 +8,9 @@ var ERC223Upgrade = artifacts.require("./ERC223Upgrade.sol");
 var Fraction = require('fractional').Fraction
 
 
-contract("Saturn", function(accounts) {
+contract("Baenet", function(accounts) {
   it("...should have 200,000 tokens with 4 decimals.", async () => {
-    const stn = await Saturn.deployed();
+    const stn = await Baenet.deployed();
 
     let emission = await stn.totalSupply();
     let decimals = await stn.decimals();
@@ -24,7 +24,7 @@ contract("Saturn", function(accounts) {
   });
 
   it("...is transferable between accounts", async () => {
-    const stn = await Saturn.deployed();
+    const stn = await Baenet.deployed();
 
     await stn.transfer(accounts[1], 20);
     let received = await stn.balanceOf(accounts[1]);
