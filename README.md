@@ -5,7 +5,7 @@ The smart contract backend for [Bae](Link coming).
 
 
 
-You can view the smart contract on [EtherScan here](https://).
+You can view the smart contract on .....
 
 ## Ethereum transaction fee structure
 
