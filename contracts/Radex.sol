@@ -5,7 +5,7 @@ import "./ERC20.sol";
 import "./ERC223.sol";
 
 
-contract Radex is ContractReceiver {
+contract BAE is ContractReceiver {
   using SafeMath for uint256;
 
   struct Order {
