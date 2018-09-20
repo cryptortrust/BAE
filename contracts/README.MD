@@ -3,7 +3,7 @@ Build StatusCoverage Status
 
 The smart contract backend for BAE.
 
-You can view the smart contract on EtherScan here. (Coming)
+You can view the smart contract on EtherScann (Coming)
 
 Ethereum transaction fee structure
 Even though we do not take any fees for using the exchange, due to the decentralized nature of the exchange you will still have to pay ethereum transaction fees. So how much will it cost?
