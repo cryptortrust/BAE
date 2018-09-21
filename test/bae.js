@@ -20,7 +20,7 @@ contract("Baenet", function(accounts) {
     assert.equal(emission, 2000000000, "Wrong total supply!");
     assert.equal(decimals, 4, "Wrong decimals!");
     assert.equal(symbol, "STN", "Wrong symbol!");
-    assert.equal(name, "Saturn", "Wrong name!");
+    assert.equal(name, "Baenet", "Wrong name!");
   });
 
   it("...is transferable between accounts", async () => {
@@ -53,15 +53,15 @@ contract("AnotherToken", function(accounts) {
 });
 
 
-contract("Radex", function(accounts) {
+contract("Bae", function(accounts) {
   function assertJump(error) {
     let revertOrInvalid = error.message.search('invalid opcode|revert')
     assert.isAbove(revertOrInvalid, -1, 'Invalid opcode error must be returned');
   }
 
-  it("Can receive and redeem Saturn tokens", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+  it("Can receive and redeem Baenet tokens", async () => {
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
     await stn.transfer(radex.address, 1234);
 
