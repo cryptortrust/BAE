@@ -17,3 +17,4 @@ script:
   - truffle test
 after_script:
   - node_modules/.bin/solidity-coverage && cat coverage/lcov.info | coveralls
+//
