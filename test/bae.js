@@ -68,7 +68,7 @@ contract("Bae", function(accounts) {
     let transferred = await stn.totalSupply() - await stn.balanceOf(accounts[0]);
     assert.equal(transferred, 1234, "should have transferred 0.1234 STN");
 
-    let received = await radex.balanceOf(stn.address, accounts[0]);
+    let received = await bae.balanceOf(stn.address, accounts[0]);
     assert.equal(transferred, received, "Should have received the same amount as transferred");
 
     await Bae.redeem(stn.address, 1200);
