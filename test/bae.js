@@ -63,7 +63,7 @@ contract("Bae", function(accounts) {
     const stn = await Baenet.deployed();
     const bae = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
+    await stn.transfer(bae.address, 1234);
 
     let transferred = await stn.totalSupply() - await stn.balanceOf(accounts[0]);
     assert.equal(transferred, 1234, "should have transferred 0.1234 STN");
@@ -76,27 +76,27 @@ contract("Bae", function(accounts) {
     assert.equal(remaining.c[0], 34, "Should have exactly 0.0034 STN remaining");
 
     try {
-      await radex.redeem(stn.address, 500);
+      await bae.redeem(stn.address, 500);
       assert.fail('Impossible to redeem tokens you dont own!');
     } catch(error) {
       assertJump(error);
     }
 
     await bae.redeem(stn.address, 34);
-    remaining = await radex.balanceOf(stn.address, accounts[0]);
+    remaining = await bae.balanceOf(stn.address, accounts[0]);
     assert.equal(remaining.c[0], 0, "Should have exactly 0.0000 STN remaining");
   });
 
   it("Can receive and redeem ether", async () => {
-    const stn = await Saturn.deployed();
+    const stn = await Baenet.deployed();
     const bae = await Bae.deployed();
 
-    await radex.fund({from: accounts[0], value: 42});
-    let received = await radex.balanceOf(0x0, accounts[0]);
+    await bae.fund({from: accounts[0], value: 42});
+    let received = await bae.balanceOf(0x0, accounts[0]);
     assert.equal(received.c[0], 42, "should have transferred 42 wei");
 
-    await radex.redeem(0x0, 20);
-    let remaining = await radex.balanceOf(0x0, accounts[0]);
+    await bae.redeem(0x0, 20);
+    let remaining = await bae.balanceOf(0x0, accounts[0]);
     assert.equal(remaining.c[0], 22, "Should have exactly 22 wei remaining");
 
     try {
