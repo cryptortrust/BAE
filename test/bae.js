@@ -71,7 +71,7 @@ contract("Bae", function(accounts) {
     let received = await bae.balanceOf(stn.address, accounts[0]);
     assert.equal(transferred, received, "Should have received the same amount as transferred");
 
-    await Bae.redeem(stn.address, 1200);
+    await bae.redeem(stn.address, 1200);
     let remaining = await bae.balanceOf(stn.address, accounts[0]);
     assert.equal(remaining.c[0], 34, "Should have exactly 0.0034 STN remaining");
 
