@@ -100,23 +100,23 @@ contract("Bae", function(accounts) {
     assert.equal(remaining.c[0], 22, "Should have exactly 22 wei remaining");
 
     try {
-      await radex.redeem(0x0, 500);
+      await bae.redeem(0x0, 500);
       assert.fail('Impossible to redeem ether you dont own!');
     } catch(error) {
       assertJump(error);
     }
 
-    await radex.redeem(0x0, 22);
-    remaining = await radex.balanceOf(0x0, accounts[0]);
+    await bae.redeem(0x0, 22);
+    remaining = await bae.balanceOf(0x0, accounts[0]);
     assert.equal(remaining.c[0], 0, "Should have exactly 0 wei remaining");
   });
 
   it("Prevents other users from stealing your funds", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
     await radex.fund({from: accounts[0], value: 42});
-    let ethreceived = await radex.balanceOf(0x0, accounts[0]);
+    let ethreceived = await bae.balanceOf(0x0, accounts[0]);
     assert.equal(ethreceived.c[0], 42, "should have transferred 42 wei");
 
     await stn.transfer(radex.address, 1234);
