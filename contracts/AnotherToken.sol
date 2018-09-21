@@ -1,5 +1,5 @@
 pragma solidity ^0.4.11;
-
+//
 import "./ERC223.sol";
 
 contract AnotherToken is ERC223Token {
