@@ -115,7 +115,7 @@ contract("Bae", function(accounts) {
     const stn = await Baenet.deployed();
     const bae = await Bae.deployed();
 
-    await radex.fund({from: accounts[0], value: 42});
+    await bae.fund({from: accounts[0], value: 42});
     let ethreceived = await bae.balanceOf(0x0, accounts[0]);
     assert.equal(ethreceived.c[0], 42, "should have transferred 42 wei");
 
@@ -143,12 +143,12 @@ contract("Bae", function(accounts) {
     let ethremaining = await bae.balanceOf(0x0, accounts[0]);
     assert.equal(ethremaining.c[0], 0, "Should have exactly 0 wei remaining");
 
-    let stnremaining = await radex.balanceOf(stn.address, accounts[0]);
+    let stnremaining = await bae.balanceOf(stn.address, accounts[0]);
     assert.equal(stnremaining.c[0], 0, "Should have exactly 0.0000 STN remaining");
   });
 
   it("Can't create orders until you fund your balance", async () => {
-    const stn = await Bae.deployed();
+    const stn = await Baenet.deployed();
     const bae = await Bae.deployed();
 
     try {
@@ -167,15 +167,15 @@ contract("Bae", function(accounts) {
     const stnDecimals   = 4;
     const desiredPrice  = 1.1; // 1.1 ETH for 1 STN
 
-    await stn.transfer(radex.address, 12000); // deposit 1.2 STN
+    await stn.transfer(bae.address, 12000); // deposit 1.2 STN
 
     var price = new Fraction(10**(etherDecimals - stnDecimals) * desiredPrice);
 
-    let firstorder = await radex.createOrder(stn.address, 0x0, 10000, price.numerator, price.denominator);
+    let firstorder = await bae.createOrder(stn.address, 0x0, 10000, price.numerator, price.denominator);
     let firstOrderId = parseInt(firstorder.logs[0].args._id.toString());
 
     try {
-      let order = await radex.createOrder(stn.address, 0x0, 10000, price.numerator, price.denominator);
+      let order = await bae.createOrder(stn.address, 0x0, 10000, price.numerator, price.denominator);
       assert.fail('Not enough funds for another order!');
     } catch(error) {
       assertJump(error);
