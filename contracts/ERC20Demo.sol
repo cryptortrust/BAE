@@ -1,5 +1,5 @@
 pragma solidity ^0.4.11;
-
+//
 import "./ERC20.sol";
 
 contract ERC20Demo is StandardToken {
