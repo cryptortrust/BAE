@@ -352,14 +352,14 @@ contract("Bae", function(accounts) {
     assert.equal(remainingEtherSecond.toString(), '0', "Should have exactly 0 ANT remaining");
     assert.equal(remainingEtherFirst.toString(), '7860000', "Should have exactly 7.86 ANT remaining");
 
-    await radex.redeem(stn.address, 10);
-    await radex.redeem(ant.address, 7860000);
-    await radex.redeem(stn.address, 9990, {from: accounts[1]});
+    await bae.redeem(stn.address, 10);
+    await bae.redeem(ant.address, 7860000);
+    await bae.redeem(stn.address, 9990, {from: accounts[1]});
 
-    remainingTokensFirst  = await radex.balanceOf(stn.address, accounts[0]);
-    remainingTokensSecond = await radex.balanceOf(stn.address, accounts[1]);
-    remainingEtherFirst   = await radex.balanceOf(0x0, accounts[0]);
-    remainingEtherSecond  = await radex.balanceOf(0x0, accounts[1]);
+    remainingTokensFirst  = await bae.balanceOf(stn.address, accounts[0]);
+    remainingTokensSecond = await bae.balanceOf(stn.address, accounts[1]);
+    remainingEtherFirst   = await bae.balanceOf(0x0, accounts[0]);
+    remainingEtherSecond  = await bae.balanceOf(0x0, accounts[1]);
 
     assert.equal(remainingTokensFirst.toString(), '0', "Should have exactly 0 STN remaining");
     assert.equal(remainingTokensSecond.toString(), '0', "Should have exactly 0 STN remaining");
@@ -368,33 +368,33 @@ contract("Bae", function(accounts) {
   });
 
   it("Makes sure that you have enough ether to fulfill the order", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
-    let order = await radex.createOrder(stn.address, 0x0, 1234, 1000000, 1);
+    await stn.transfer(bae.address, 1234);
+    let order = await bae.createOrder(stn.address, 0x0, 1234, 1000000, 1);
 
     try {
-      let trade = await radex.executeOrder(order.logs[0].args._id.toString(), 1234, {from: accounts[1]});
+      let trade = await bae.executeOrder(order.logs[0].args._id.toString(), 1234, {from: accounts[1]});
       assert.fail('Not enough Ether!');
     } catch(error) {
       assertJump(error);
     }
 
-    await radex.cancelOrder(parseInt(order.logs[0].args._id.toString()));
-    await radex.redeem(stn.address, 1234);
+    await bae.cancelOrder(parseInt(order.logs[0].args._id.toString()));
+    await bae.redeem(stn.address, 1234);
   });
 
   it("Makes sure that you have enough tokens to fulfill the order", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
-    await radex.fund({value: 12345678});
-    let order = await radex.createOrder(0x0, stn.address, 12345678, 1, 1);
+    await bae.fund({value: 12345678});
+    let order = await bae.createOrder(0x0, stn.address, 12345678, 1, 1);
     let orderId = parseInt(order.logs[0].args._id.toString());
 
     try {
-      let trade = await radex.executeOrder(orderId, 12345678, {from: accounts[1]});
+      let trade = await bae.executeOrder(orderId, 12345678, {from: accounts[1]});
       assert.fail('Not enough STN!');
     } catch(error) {
       assertJump(error);
