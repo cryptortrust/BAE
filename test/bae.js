@@ -283,7 +283,7 @@ contract("Bae", function(accounts) {
 
     let etherAmount = 11 * 10**(etherDecimals - 1);
 
-    await stn.transfer(radex.address, 10000);
+    await stn.transfer(bae.address, 10000);
     await bae.fund({from: accounts[1], value: etherAmount});
 
     // for a trade in another direction we just flip the numerator and denominator
