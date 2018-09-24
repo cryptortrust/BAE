@@ -248,24 +248,24 @@ contract("Bae", function(accounts) {
     let order = await bae.createOrder(stn.address, 0x0, 10000, price.numerator, price.denominator);
     let trade = await bae.executeOrder(order.logs[0].args._id.toString(), 10000, {from: accounts[1]});
 
-    let remainingTokensFirst  = await radex.balanceOf(stn.address, accounts[0]);
-    let remainingTokensSecond = await radex.balanceOf(stn.address, accounts[1]);
-    let remainingEtherFirst   = await radex.balanceOf(0x0, accounts[0]);
-    let remainingEtherSecond  = await radex.balanceOf(0x0, accounts[1]);
+    let remainingTokensFirst  = await bae.balanceOf(stn.address, accounts[0]);
+    let remainingTokensSecond = await bae.balanceOf(stn.address, accounts[1]);
+    let remainingEtherFirst   = await bae.balanceOf(0x0, accounts[0]);
+    let remainingEtherSecond  = await bae.balanceOf(0x0, accounts[1]);
 
     assert.equal(remainingTokensFirst.toString(), '10', "Should have exactly 0.0010 STN remaining");
     assert.equal(remainingTokensSecond.toString(), '9990', "Should have exactly 0.999 STN remaining");
     assert.equal(remainingEtherSecond.toString(), '0', "Should have exactly 0 ETH remaining");
     assert.equal(remainingEtherFirst.toString(), '1100000000000000000', "Should have exactly 1.1 ETH remaining");
 
-    await radex.redeem(stn.address, 10);
-    await radex.redeem(0x0, 1100000000000000000);
-    await radex.redeem(stn.address, 9990, {from: accounts[1]});
+    await bae.redeem(stn.address, 10);
+    await bae.redeem(0x0, 1100000000000000000);
+    await bae.redeem(stn.address, 9990, {from: accounts[1]});
 
-    remainingTokensFirst  = await radex.balanceOf(stn.address, accounts[0]);
-    remainingTokensSecond = await radex.balanceOf(stn.address, accounts[1]);
-    remainingEtherFirst   = await radex.balanceOf(0x0, accounts[0]);
-    remainingEtherSecond  = await radex.balanceOf(0x0, accounts[1]);
+    remainingTokensFirst  = await bae.balanceOf(stn.address, accounts[0]);
+    remainingTokensSecond = await bae.balanceOf(stn.address, accounts[1]);
+    remainingEtherFirst   = await bae.balanceOf(0x0, accounts[0]);
+    remainingEtherSecond  = await bae.balanceOf(0x0, accounts[1]);
 
     assert.equal(remainingTokensFirst.toString(), '0', "Should have exactly 0 STN remaining");
     assert.equal(remainingTokensSecond.toString(), '0', "Should have exactly 0 STN remaining");
@@ -274,8 +274,8 @@ contract("Bae", function(accounts) {
   });
 
   it("Allows to trade ETH for tokens", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
     const etherDecimals = 18;
     const stnDecimals   = 4;
@@ -284,20 +284,20 @@ contract("Bae", function(accounts) {
     let etherAmount = 11 * 10**(etherDecimals - 1);
 
     await stn.transfer(radex.address, 10000);
-    await radex.fund({from: accounts[1], value: etherAmount});
+    await bae.fund({from: accounts[1], value: etherAmount});
 
     // for a trade in another direction we just flip the numerator and denominator
     // i.e. if 2 * x = y, then x = y * 1/2
     var price = new Fraction(1, 10**(etherDecimals - stnDecimals - 1) * 11);
-    let order = await radex.createOrder(0x0, stn.address, etherAmount, price.numerator, price.denominator, {from: accounts[1]});
-    let trade = await radex.executeOrder(order.logs[0].args._id.toString(), etherAmount);
+    let order = await bae.createOrder(0x0, stn.address, etherAmount, price.numerator, price.denominator, {from: accounts[1]});
+    let trade = await bae.executeOrder(order.logs[0].args._id.toString(), etherAmount);
 
     // fee = floor(1234 / 1000) = 1 STN
     // goes back to market maker
-    let remainingTokensFirst  = await radex.balanceOf(stn.address, accounts[0]);
-    let remainingTokensSecond = await radex.balanceOf(stn.address, accounts[1]);
-    let remainingEtherFirst   = await radex.balanceOf(0x0, accounts[0]);
-    let remainingEtherSecond  = await radex.balanceOf(0x0, accounts[1]);
+    let remainingTokensFirst  = await bae.balanceOf(stn.address, accounts[0]);
+    let remainingTokensSecond = await bae.balanceOf(stn.address, accounts[1]);
+    let remainingEtherFirst   = await bae.balanceOf(0x0, accounts[0]);
+    let remainingEtherSecond  = await bae.balanceOf(0x0, accounts[1]);
 
     assert.equal(remainingTokensFirst.toString(), '0', "Should have exactly 0 STN remaining");
     assert.equal(remainingTokensSecond.toString(), '10000', "Should have exactly 1 STN remaining");
