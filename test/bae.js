@@ -304,14 +304,14 @@ contract("Bae", function(accounts) {
     assert.equal(remainingEtherSecond.toString(), '1100000000000000', "Should have exactly 0.0011 ETH remaining");
     assert.equal(remainingEtherFirst.toString(), '1098900000000000000', "Should have exactly 1.0989 ETH remaining");
 
-    await radex.redeem(stn.address, 10000, {from: accounts[1]});
-    await radex.redeem(0x0, 1100000000000000, {from: accounts[1]});
-    await radex.redeem(0x0, 1098900000000000000);
+    await bae.redeem(stn.address, 10000, {from: accounts[1]});
+    await bae.redeem(0x0, 1100000000000000, {from: accounts[1]});
+    await bae.redeem(0x0, 1098900000000000000);
 
-    remainingTokensFirst  = await radex.balanceOf(stn.address, accounts[0]);
-    remainingTokensSecond = await radex.balanceOf(stn.address, accounts[1]);
-    remainingEtherFirst   = await radex.balanceOf(0x0, accounts[0]);
-    remainingEtherSecond  = await radex.balanceOf(0x0, accounts[1]);
+    remainingTokensFirst  = await bae.balanceOf(stn.address, accounts[0]);
+    remainingTokensSecond = await bae.balanceOf(stn.address, accounts[1]);
+    remainingEtherFirst   = await bae.balanceOf(0x0, accounts[0]);
+    remainingEtherSecond  = await bae.balanceOf(0x0, accounts[1]);
 
     assert.equal(remainingTokensFirst.toString(), '0', "Should have exactly 0 STN remaining");
     assert.equal(remainingTokensSecond.toString(), '0', "Should have exactly 0 STN remaining");
@@ -320,9 +320,9 @@ contract("Bae", function(accounts) {
   });
 
   it("Allows to trade tokens for other tokens", async () => {
-    const stn   = await Saturn.deployed();
+    const stn   = await Baenet.deployed();
     const ant   = await AnotherToken.deployed();
-    const radex = await Radex.deployed();
+    const bae = await Bae.deployed();
 
     const antDecimals  = 6;
     const stnDecimals  = 4;
@@ -331,21 +331,21 @@ contract("Bae", function(accounts) {
     // give second account some ANT to play with
     await ant.transfer(accounts[1], 50000000);
 
-    await stn.transfer(radex.address, 10000);
-    await ant.transfer(radex.address, 7860000, {from: accounts[1]});
+    await stn.transfer(bae.address, 10000);
+    await ant.transfer(bae.address, 7860000, {from: accounts[1]});
 
-    let initialEtherBalance  = await radex.balanceOf(ant.address, accounts[1]);
+    let initialEtherBalance  = await bae.balanceOf(ant.address, accounts[1]);
     assert.equal(initialEtherBalance.toString(), desiredPrice*(10**antDecimals), "Has the right amount of ANT for trade")
 
 
     var price = new Fraction(10**(antDecimals - stnDecimals) * desiredPrice);
-    let order = await radex.createOrder(stn.address, ant.address, 10000, price.numerator, price.denominator);
-    let trade = await radex.executeOrder(order.logs[0].args._id.toString(), 10000, {from: accounts[1]});
+    let order = await bae.createOrder(stn.address, ant.address, 10000, price.numerator, price.denominator);
+    let trade = await bae.executeOrder(order.logs[0].args._id.toString(), 10000, {from: accounts[1]});
 
-    let remainingTokensFirst  = await radex.balanceOf(stn.address, accounts[0]);
-    let remainingTokensSecond = await radex.balanceOf(stn.address, accounts[1]);
-    let remainingEtherFirst   = await radex.balanceOf(ant.address, accounts[0]);
-    let remainingEtherSecond  = await radex.balanceOf(ant.address, accounts[1]);
+    let remainingTokensFirst  = await bae.balanceOf(stn.address, accounts[0]);
+    let remainingTokensSecond = await bae.balanceOf(stn.address, accounts[1]);
+    let remainingEtherFirst   = await bae.balanceOf(ant.address, accounts[0]);
+    let remainingEtherSecond  = await bae.balanceOf(ant.address, accounts[1]);
 
     assert.equal(remainingTokensFirst.toString(), '10', "Should have exactly 0.0010 STN remaining");
     assert.equal(remainingTokensSecond.toString(), '9990', "Should have exactly 0.999 STN remaining");
