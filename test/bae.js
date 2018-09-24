@@ -199,16 +199,16 @@ contract("Bae", function(accounts) {
     await bae.cancelOrder(firstOrderId);
     await bae.redeem(stn.address, 10000);
 
-    remaining = await radex.balanceOf(stn.address, accounts[0]);
+    remaining = await bae.balanceOf(stn.address, accounts[0]);
     assert.equal(remaining.c[0], 0, "Should have exactly 0.0000 STN remaining");
   });
 
   it("Prevents other people from cancelling your orders", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
-    let firstorder = await radex.createOrder(stn.address, 0x0, 1000, 1, 1); // exchange one wei to one miniSTN
+    await stn.transfer(bae.address, 1234);
+    let firstorder = await bae.createOrder(stn.address, 0x0, 1000, 1, 1); // exchange one wei to one miniSTN
     let firstOrderId = parseInt(firstorder.logs[0].args._id.toString());
 
     try {
@@ -218,25 +218,25 @@ contract("Bae", function(accounts) {
       assertJump(error);
     }
 
-    await radex.cancelOrder(firstOrderId, {from: accounts[0]});
-    await radex.redeem(stn.address, 1234);
+    await bae.cancelOrder(firstOrderId, {from: accounts[0]});
+    await bae.redeem(stn.address, 1234);
 
-    remaining = await radex.balanceOf(stn.address, accounts[0]);
+    remaining = await bae.balanceOf(stn.address, accounts[0]);
     assert.equal(remaining.c[0], 0, "Should have exactly 0.0000 STN remaining");
   });
 
   it("Allows to trade tokens for ETH", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
     const etherDecimals = 18;
     const stnDecimals   = 4;
     const desiredPrice  = 1.1; // 1.1 ETH for 1 STN
 
-    await stn.transfer(radex.address, 10000);
-    await radex.fund({from: accounts[1], value: 11 * 10**(etherDecimals - 1)});
+    await stn.transfer(bae.address, 10000);
+    await bae.fund({from: accounts[1], value: 11 * 10**(etherDecimals - 1)});
 
-    let initialEtherBalance  = await radex.balanceOf(0x0, accounts[1]);
+    let initialEtherBalance  = await bae.balanceOf(0x0, accounts[1]);
     assert.equal(web3.fromWei(initialEtherBalance.toString()), 1.1, "Has 1.1 ETH available for trade")
 
     // important to keep things integer
@@ -245,8 +245,8 @@ contract("Bae", function(accounts) {
     // var price = new Fraction(10**(etherDecimals - stnDecimals) * 1.1);
     // because in javascript, 10**(etherDecimals - stnDecimals) * 1.1 = 110000000000000.02
     var price = new Fraction(10**(etherDecimals - stnDecimals - 1) * 11);
-    let order = await radex.createOrder(stn.address, 0x0, 10000, price.numerator, price.denominator);
-    let trade = await radex.executeOrder(order.logs[0].args._id.toString(), 10000, {from: accounts[1]});
+    let order = await bae.createOrder(stn.address, 0x0, 10000, price.numerator, price.denominator);
+    let trade = await bae.executeOrder(order.logs[0].args._id.toString(), 10000, {from: accounts[1]});
 
     let remainingTokensFirst  = await radex.balanceOf(stn.address, accounts[0]);
     let remainingTokensSecond = await radex.balanceOf(stn.address, accounts[1]);
