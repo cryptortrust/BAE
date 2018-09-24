@@ -400,54 +400,54 @@ contract("Bae", function(accounts) {
       assertJump(error);
     }
 
-    await radex.cancelOrder(orderId);
-    await radex.redeem(0x0, 12345678);
+    await bae.cancelOrder(orderId);
+    await bae.redeem(0x0, 12345678);
   });
 
   it("Can't trade against an order that doesn't have enough capacity", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
-    await radex.fund({value: 1234000000});
-    let order = await radex.createOrder(0x0, stn.address, 1234, 1000000, 1);
+    await bae.fund({value: 1234000000});
+    let order = await bae.createOrder(0x0, stn.address, 1234, 1000000, 1);
     let orderId = parseInt(order.logs[0].args._id.toString());
 
     try {
-      let trade = await radex.executeOrder(orderId, 9000);
+      let trade = await bae.executeOrder(orderId, 9000);
       assert.fail('The order cannot handle this amount!');
     } catch(error) {
       assertJump(error);
     }
 
-    await radex.cancelOrder(orderId);
-    await radex.redeem(0x0, 1234000000);
+    await bae.cancelOrder(orderId);
+    await bae.redeem(0x0, 1234000000);
   });
 
   it("Tracks balance of active orders in commitments", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
-    await radex.fund({value: 1234});
+    await bae.fund({value: 1234});
 
-    let balance = await radex.balanceOf(0x0, accounts[0]);
-    let commitment = await radex.commitmentsOf(0x0, accounts[0]);
+    let balance = await bae.balanceOf(0x0, accounts[0]);
+    let commitment = await bae.commitmentsOf(0x0, accounts[0]);
 
     assert.equal(balance.c[0], 1234, "Should have exactly 1234 wei remaining balance");
     assert.equal(commitment.c[0], 0, "Should have exactly 0 wei in commitments");
 
-    let order = await radex.createOrder(0x0, stn.address, 1234, 10, 1);
+    let order = await bae.createOrder(0x0, stn.address, 1234, 10, 1);
     let orderId = parseInt(order.logs[0].args._id.toString());
 
-    balance = await radex.balanceOf(0x0, accounts[0]);
-    commitment = await radex.commitmentsOf(0x0, accounts[0]);
+    balance = await bae.balanceOf(0x0, accounts[0]);
+    commitment = await bae.commitmentsOf(0x0, accounts[0]);
 
     assert.equal(balance.c[0], 0, "Should have exactly 0 wei remaining balance");
     assert.equal(commitment.c[0], 1234, "Should have exactly 1234 wei in commitments");
 
-    await radex.cancelOrder(orderId);
-    await radex.redeem(0x0, 1234);
+    await bae.cancelOrder(orderId);
+    await bae.redeem(0x0, 1234);
 
-    balance = await radex.balanceOf(0x0, accounts[0]);
+    balance = await bae.balanceOf(0x0, accounts[0]);
     commitment = await radex.commitmentsOf(0x0, accounts[0]);
 
     assert.equal(balance.c[0], 0, "Should have exactly 0 wei remaining balance");
