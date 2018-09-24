@@ -448,53 +448,53 @@ contract("Bae", function(accounts) {
     await bae.redeem(0x0, 1234);
 
     balance = await bae.balanceOf(0x0, accounts[0]);
-    commitment = await radex.commitmentsOf(0x0, accounts[0]);
+    commitment = await bae.commitmentsOf(0x0, accounts[0]);
 
     assert.equal(balance.c[0], 0, "Should have exactly 0 wei remaining balance");
     assert.equal(commitment.c[0], 0, "Should have exactly 0 wei in commitments");
   });
 
   it("Can trade against an order until the funds run out", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
-    await radex.fund({value: 1234, from: accounts[1]});
-    await stn.transfer(radex.address, 1234);
+    await bae.fund({value: 1234, from: accounts[1]});
+    await stn.transfer(bae.address, 1234);
 
-    let balanceTrader = await radex.balanceOf(stn.address, accounts[0]);
-    let balance = await radex.balanceOf(0x0, accounts[1]);
-    let commitment = await radex.commitmentsOf(0x0, accounts[1]);
+    let balanceTrader = await bae.balanceOf(stn.address, accounts[0]);
+    let balance = await bae.balanceOf(0x0, accounts[1]);
+    let commitment = await bae.commitmentsOf(0x0, accounts[1]);
 
     assert.equal(balance.c[0], 1234, "Should have exactly 1234 wei remaining balance");
     assert.equal(commitment.c[0], 0, "Should have exactly 0 wei in commitments");
     assert.equal(balanceTrader.c[0], 1234, "Should have exactly 0.1234 STN remaining balance");
 
-    let order = await radex.createOrder(0x0, stn.address, 1234, 1, 1, {from: accounts[1]});
+    let order = await bae.createOrder(0x0, stn.address, 1234, 1, 1, {from: accounts[1]});
     let orderId = parseInt(order.logs[0].args._id.toString());
 
-    let trade = await radex.executeOrder(orderId, 1200);
+    let trade = await bae.executeOrder(orderId, 1200);
 
-    balance = await radex.balanceOf(0x0, accounts[1]);
-    commitment = await radex.commitmentsOf(0x0, accounts[1]);
-    balanceTrader = await radex.balanceOf(stn.address, accounts[0]);
+    balance = await bae.balanceOf(0x0, accounts[1]);
+    commitment = await bae.commitmentsOf(0x0, accounts[1]);
+    balanceTrader = await bae.balanceOf(stn.address, accounts[0]);
 
     assert.equal(balance.c[0], 1, "Should have exactly 1 wei remaining balance");
     assert.equal(commitment.c[0], 34, "Should have exactly 0 wei in commitments");
     assert.equal(balanceTrader.c[0], 34, "Should have exactly 0.0034 STN remaining balance");
 
-    trade = await radex.executeOrder(orderId, 34);
+    trade = await bae.executeOrder(orderId, 34);
 
-    balance = await radex.balanceOf(0x0, accounts[1]);
-    commitment = await radex.commitmentsOf(0x0, accounts[1]);
-    balanceTrader = await radex.balanceOf(stn.address, accounts[0]);
+    balance = await bae.balanceOf(0x0, accounts[1]);
+    commitment = await bae.commitmentsOf(0x0, accounts[1]);
+    balanceTrader = await bae.balanceOf(stn.address, accounts[0]);
 
     assert.equal(balance.c[0], 1, "Should have exactly 1 wei remaining balance");
     assert.equal(commitment.c[0], 0, "Should have exactly 0 wei in commitments");
     assert.equal(balanceTrader.c[0], 0, "Should have exactly 0.0034 STN remaining balance");
 
-    await radex.redeem(0x0, 1, {from: accounts[1]});
-    await radex.redeem(stn.address, 1234, {from: accounts[1]});
-    await radex.redeem(0x0, 1233);
+    await bae.redeem(0x0, 1, {from: accounts[1]});
+    await bae.redeem(stn.address, 1234, {from: accounts[1]});
+    await bae.redeem(0x0, 1233);
 
     let remainingTokensFirst  = await radex.balanceOf(stn.address, accounts[0]);
     let remainingTokensSecond = await radex.balanceOf(stn.address, accounts[1]);
