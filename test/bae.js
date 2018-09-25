@@ -496,10 +496,10 @@ contract("Bae", function(accounts) {
     await bae.redeem(stn.address, 1234, {from: accounts[1]});
     await bae.redeem(0x0, 1233);
 
-    let remainingTokensFirst  = await radex.balanceOf(stn.address, accounts[0]);
-    let remainingTokensSecond = await radex.balanceOf(stn.address, accounts[1]);
-    let remainingEtherFirst   = await radex.balanceOf(0x0, accounts[0]);
-    let remainingEtherSecond  = await radex.balanceOf(0x0, accounts[1]);
+    let remainingTokensFirst  = await bae.balanceOf(stn.address, accounts[0]);
+    let remainingTokensSecond = await bae.balanceOf(stn.address, accounts[1]);
+    let remainingEtherFirst   = await bae.balanceOf(0x0, accounts[0]);
+    let remainingEtherSecond  = await bae.balanceOf(0x0, accounts[1]);
 
     assert.equal(remainingTokensFirst.c[0], 0, "Should have exactly 0 STN remaining");
     assert.equal(remainingTokensSecond.c[0], 0, "Should have exactly 0 STN remaining");
