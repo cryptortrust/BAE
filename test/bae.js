@@ -651,50 +651,50 @@ contract("Bae", function(accounts) {
       assertJump(error);
     }
 
-    await radex.redeem(stn.address, 1234);
+    await bae.redeem(stn.address, 1234);
   });
 
   it("Cannot redeem nothing", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const radex = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
+    await stn.transfer(bae.address, 1234);
 
     try {
-      await radex.redeem(stn.address, 0);
+      await bae.redeem(stn.address, 0);
       assert.fail('redeeming 0 tokens is pointless!');
     } catch(error) {
       assertJump(error);
     }
 
-    await radex.redeem(stn.address, 1234);
+    await bae.redeem(stn.address, 1234);
   });
 
   it("Can deposit and withdraw ERC20 tokens", async () => {
     const erc20  = await ERC20Demo.deployed();
     const erc223 = await ERC223Upgrade.deployed();
-    const radex  = await Radex.deployed();
+    const bae  = await Bae.deployed();
 
-    await radex.register(erc20.address, erc223.address);
+    await bae.register(erc20.address, erc223.address);
     let supply = await erc20.totalSupply();
     await erc20.approve(erc223.address, supply.toString());
 
-    await erc223.transfer(radex.address, 1234);
+    await erc223.transfer(bae.address, 1234);
     let erc20balance = await erc20.balanceOf(radex.address);
-    let radexdeposit = await radex.balanceOf(erc223.address, accounts[0]);
+    let baedeposit = await bae.balanceOf(erc223.address, accounts[0]);
 
-    assert.equal(erc20balance.toString(), radexdeposit.toString(), "Should have deposited erc20 tokens");
+    assert.equal(erc20balance.toString(), baedeposit.toString(), "Should have deposited erc20 tokens");
 
-    await radex.redeem(erc223.address, 1234);
+    await bae.redeem(erc223.address, 1234);
   });
 
   it("Only admin can add an ERC20<>ERC223 upgrade", async () => {
     const erc20  = await ERC20Demo.deployed();
     const erc223 = await ERC223Upgrade.deployed();
-    const radex  = await Radex.deployed();
+    const bae  = await Bae.deployed();
 
     try {
-      await radex.register(erc20.address, erc223.address, {from: accounts[1]});
+      await bae.register(erc20.address, erc223.address, {from: accounts[1]});
       assert.fail('Cannot register ERC20 unless you are an admin');
     } catch(error) {
       assertJump(error);
