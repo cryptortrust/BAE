@@ -598,54 +598,54 @@ contract("Bae", function(accounts) {
 
     await bae.cancelOrder(orderId);
 
-    await radex.redeem(0x0, 1234);
-    await radex.redeem(stn.address, 1234);
+    await bae.redeem(0x0, 1234);
+    await bae.redeem(stn.address, 1234);
   });
 
   it("Prevents trade spam with zero value", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const radex = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
-    await radex.fund({value: 1234, from: accounts[1]});
-    let order = await radex.createOrder(stn.address, 0x0, 1234, 1, 1);
+    await stn.transfer(bae.address, 1234);
+    await bae.fund({value: 1234, from: accounts[1]});
+    let order = await bae.createOrder(stn.address, 0x0, 1234, 1, 1);
     let orderId = parseInt(order.logs[0].args._id.toString());
 
     try {
-      let trade = await radex.executeOrder(orderId, 0, {from: accounts[1]});
+      let trade = await bae.executeOrder(orderId, 0, {from: accounts[1]});
       assert.fail('Cannot execute an order with 0 amount!');
     } catch(error) {
       assertJump(error);
     }
 
-    await radex.cancelOrder(orderId);
+    await bae.cancelOrder(orderId);
 
-    await radex.redeem(stn.address, 1234);
-    await radex.redeem(0x0, 1234, {from: accounts[1]});
+    await bae.redeem(stn.address, 1234);
+    await bae.redeem(0x0, 1234, {from: accounts[1]});
   });
 
   it("Prevents creating orders with 0 amount or price", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const radex = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
+    await stn.transfer(bae.address, 1234);
 
     try {
-      let order = await radex.createOrder(stn.address, 0x0, 0, 1, 1);
+      let order = await bae.createOrder(stn.address, 0x0, 0, 1, 1);
       assert.fail('Order amount cannot be zero!');
     } catch(error) {
       assertJump(error);
     }
 
     try {
-      let order = await radex.createOrder(stn.address, 0x0, 1234, 0, 1);
+      let order = await bae.createOrder(stn.address, 0x0, 1234, 0, 1);
       assert.fail('Order price cannot be zero!');
     } catch(error) {
       assertJump(error);
     }
 
     try {
-      let order = await radex.createOrder(stn.address, 0x0, 1234, 1, 0);
+      let order = await bae.createOrder(stn.address, 0x0, 1234, 1, 0);
       assert.fail('Order price cannot be infinity!');
     } catch(error) {
       assertJump(error);
