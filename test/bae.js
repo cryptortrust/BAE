@@ -549,27 +549,27 @@ contract("Bae", function(accounts) {
     await stn.transfer(radex.address, 1234);
 
     try {
-      await radex.createOrder(stn.address, 0x0, 1234, 1, 100000);
+      await bae.createOrder(stn.address, 0x0, 1234, 1, 100000);
       assert.fail('Cannot trade against an order that never existed!');
     } catch(error) {
       assertJump(error);
     }
 
-    await radex.redeem(stn.address, 1234);
+    await bae.redeem(stn.address, 1234);
   });
 
   it("Cannot cancel an order that has been fulfilled", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
-    await radex.fund({value: 1234, from: accounts[1]});
-    let order = await radex.createOrder(stn.address, 0x0, 1234, 1, 1);
+    await stn.transfer(bae.address, 1234);
+    await bae.fund({value: 1234, from: accounts[1]});
+    let order = await bae.createOrder(stn.address, 0x0, 1234, 1, 1);
     let orderId = parseInt(order.logs[0].args._id.toString());
-    let trade = await radex.executeOrder(orderId, 1234, {from: accounts[1]});
+    let trade = await bae.executeOrder(orderId, 1234, {from: accounts[1]});
 
     try {
-      await radex.cancelOrder(orderId);
+      await bae.cancelOrder(orderId);
       assert.fail('What is dead cannot be killed!');
     } catch(error) {
       assertJump(error);
