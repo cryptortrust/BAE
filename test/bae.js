@@ -508,43 +508,43 @@ contract("Bae", function(accounts) {
   });
 
   it("Cannot create an order that trades a token for itself", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const radex = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
+    await stn.transfer(bae.address, 1234);
 
     try {
-      let order = await radex.createOrder(stn.address, stn.address, 1234, 1, 1);
+      let order = await bae.createOrder(stn.address, stn.address, 1234, 1, 1);
       assert.fail('Cannot trade a token for itself!');
     } catch(error) {
       assertJump(error);
     }
 
-    await radex.redeem(stn.address, 1234);
+    await bae.redeem(stn.address, 1234);
   });
 
   it("Cannot execute an order that never existed", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const radex = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
-    let order = await radex.createOrder(stn.address, 0x0, 1234, 1, 1);
+    await stn.transfer(bae.address, 1234);
+    let order = await bae.createOrder(stn.address, 0x0, 1234, 1, 1);
     let orderId = parseInt(order.logs[0].args._id.toString());
 
     try {
-      await radex.executeOrder(orderId + 2, 1234, {from: accounts[1]});
+      await bae.executeOrder(orderId + 2, 1234, {from: accounts[1]});
       assert.fail('Cannot trade against an order that never existed!');
     } catch(error) {
       assertJump(error);
     }
 
-    await radex.cancelOrder(orderId);
-    await radex.redeem(stn.address, 1234);
+    await bae.cancelOrder(orderId);
+    await bae.redeem(stn.address, 1234);
   });
 
   it("Cannot create an order that trades for 0 tokens", async () => {
-    const stn = await Saturn.deployed();
-    const radex = await Radex.deployed();
+    const stn = await Baenet.deployed();
+    const bae = await Bae.deployed();
 
     await stn.transfer(radex.address, 1234);
 
