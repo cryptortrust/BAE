@@ -546,7 +546,7 @@ contract("Bae", function(accounts) {
     const stn = await Baenet.deployed();
     const bae = await Bae.deployed();
 
-    await stn.transfer(radex.address, 1234);
+    await stn.transfer(bae.address, 1234);
 
     try {
       await bae.createOrder(stn.address, 0x0, 1234, 1, 100000);
