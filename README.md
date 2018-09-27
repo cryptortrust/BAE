@@ -5,7 +5,7 @@ The smart contract backend for BAE (link coming........)
 
 
 
-You can view the smart contract on .....
+You can view the smart contract on ..... 
 
 ## Ethereum transaction fee structure
 
