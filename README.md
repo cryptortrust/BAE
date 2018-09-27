@@ -1,7 +1,7 @@
 # BAE (working name) - decentralized exchange for Ethereum ERC223 tokens
 [![Build Status]
 
-The smart contract backend for [Bae](Link coming).
+The smart contract backend for BAE (link coming........)
 
 
 
