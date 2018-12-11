@@ -5,6 +5,7 @@ import "./ERC20.sol";
 import "./ERC223.sol";
 
 
+
 contract BAE is ContractReceiver {
   using SafeMath for uint256;
 
@@ -144,3 +145,4 @@ contract BAE is ContractReceiver {
     erc20.approve(erc223token, supply);
   }
 }
+
