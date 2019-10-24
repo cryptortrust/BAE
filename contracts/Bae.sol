@@ -18,7 +18,7 @@ contract BAE is ContractReceiver {
     uint256 priceDiv;
   }
 
-  // fee to be paid towards market makers
+  // fee to be paid towards market makers   
   // fee amount = trade amount divided by feeMultiplier
   uint256 public  feeMultiplier;
   address private admin;
