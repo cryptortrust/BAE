@@ -4,4 +4,4 @@ node_modules
 coverage.json
 .als
 bin
-coverage
+coverage 
